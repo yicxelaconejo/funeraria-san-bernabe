@@ -10,12 +10,13 @@ import {
   IconButton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 export default function HeaderAfiliado() {
+  const { id: titularId } = useParams();
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -59,7 +60,7 @@ export default function HeaderAfiliado() {
           <MenuItem value="">Filtrar</MenuItem>
         </Select>
 
-        <Link to="/register-afiliado" style={{ textDecoration: "none" }}>
+        <Link to={`/titulares/${titularId}/afiliados/register`} style={{ textDecoration: "none" }}>
           <Button
             variant="contained"
             startIcon={<PersonAddIcon sx={{ color: "#0097B2" }} />}

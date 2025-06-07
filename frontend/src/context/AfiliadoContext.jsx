@@ -37,6 +37,7 @@ export function AfiliadoProvider({ children }) {
       console.log(res);
     } catch (error) {
       console.error(error);
+      throw error;
     }
   };
 

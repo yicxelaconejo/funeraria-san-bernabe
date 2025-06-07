@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import {
   createHeadlines,
   getHeadlines,
@@ -7,7 +7,7 @@ import {
   updateHeadlines,
 } from "../api/headline";
 import axios from "../api/axios";
-import { getAfiliadosByTitular } from "../api/afiliado"; // Importa la función para afiliados
+import { getAfiliadosByTitular } from "../api/afiliado"; // Función para afiliados
 
 const HeadlineContext = createContext();
 
@@ -63,25 +63,25 @@ export function HeadlineProvider({ children }) {
     }
   };
 
-  // Función para traer afiliados por titular y guardar en estado
-  const getAfiliados = async (titularId) => {
+  // Memoizamos esta función para evitar que cambie y cause re-render infinito
+  const getAfiliados = useCallback(async (titularId) => {
     try {
       const res = await getAfiliadosByTitular(titularId);
       setAfiliados(res.data);
     } catch (error) {
       console.error("Error al obtener afiliados:", error);
     }
-  };
+  }, []);
 
   const toggleEstadoTitular = async (id) => {
-  try {
-    const response = await axios.put(`/headlines/${id}/estado`);
-    return response.data;
-  } catch (error) {
-    console.error("Error al cambiar estado del titular:", error);
-    return null;
-  }
-};
+    try {
+      const response = await axios.put(`/headlines/${id}/estado`);
+      return response.data;
+    } catch (error) {
+      console.error("Error al cambiar estado del titular:", error);
+      return null;
+    }
+  };
 
   return (
     <HeadlineContext.Provider
@@ -93,8 +93,8 @@ export function HeadlineProvider({ children }) {
         getHeadlineid,
         updateHeadlineId,
         toggleEstadoTitular,
-        afiliados,   
-        getAfiliados, // Exponemos función para obtener afiliados
+        afiliados,
+        getAfiliados, // función memoizada aquí
       }}
     >
       {children}

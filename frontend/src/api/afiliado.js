@@ -19,5 +19,3 @@ export const deleteAffiliate = (id) => axios.delete(`/afiliados/${id}`);
 
 export const getAfiliadosByTitular = (id) => 
   axios.get(`/titulares/${id}/afiliados`);
-
-export const deleteAfiliado = (id) => axios.delete(`/afiliados/${id}`);

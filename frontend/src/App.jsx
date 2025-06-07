@@ -54,7 +54,8 @@ function AppRoutes() {
           <Route path="/ruta-cobro" element={<RouteMap />} />
           <Route path="/ruta-cobro/:id" element={<RutaMapaTitular />} />
 
-          <Route path="/register-afiliado" element={<AfiliadoFormPage />} />
+          <Route path="/titulares/:id/afiliados/register" element={<AfiliadoFormPage />} /> 
+          <Route path="/titulares/:id/afiliados/:afiliadoId/update" element={<AfiliadoFormPage />} />
           <Route path="/titulares/:id/afiliados" element={<AfiliadosTablePage />} />
           <Route path="/get-afiliado/:id" element={<DetalleAfiliadoPage />} />
         

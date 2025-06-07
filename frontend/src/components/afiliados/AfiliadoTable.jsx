@@ -23,7 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteAfiliado } from "../../api/afiliado";
+import { deleteAffiliate } from "../../api/afiliado";
 import { useHeadline } from "../../context/HeadlinesContext";
 
 export default function AfiliadoTable() {
@@ -54,7 +54,7 @@ export default function AfiliadoTable() {
 
   const handleConfirmDelete = async () => {
     try {
-      await deleteAfiliado(selectedAfiliado._id);
+      await deleteAffiliate(selectedAfiliado._id);
       setSnackbarMessage("Afiliado eliminado correctamente");
       setSnackbarOpen(true);
       getAfiliados(id); // <-- corregido
@@ -124,10 +124,12 @@ export default function AfiliadoTable() {
                   </Tooltip>
 
                   <Tooltip title="Editar Afiliado" {...customTooltipProps}>
-                    <IconButton
-                      onClick={() => navigate(`/update-afiliado/${a._id}`)}
-                      sx={{ "&:hover svg": { color: "#0097B2" } }}
-                    >
+                     <IconButton
+                        onClick={() =>
+                          navigate(`/titulares/${id}/afiliados/${a._id}/update`)
+                        }
+                        sx={{ "&:hover svg": { color: "#0097B2" } }}
+                      >
                       <EditIcon />
                     </IconButton>
                   </Tooltip>

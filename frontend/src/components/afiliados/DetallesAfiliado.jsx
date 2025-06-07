@@ -58,13 +58,15 @@ export default function DetallesAfiliado() {
 
       reset({
         ...data,
+        perteneceTitular: data.perteneceTitular?._id ?? "",
         fechaNacimientoAfiliado: formatDate(data.fechaNacimientoAfiliado),
         fechaAfiliacionAfiliado: formatDate(data.fechaAfiliacionAfiliado),
         fechaVenAfiliado: formatDate(data.fechaVenAfiliado),
+       
+        
 
       });
-
-      setIdTitular(data.perteneceTitular); // Guardamos el ID del titular
+      setIdTitular(data.perteneceTitular?._id ?? ""); // Guardamos el ID del titular
     };
 
     fetchAfiliado();
@@ -177,7 +179,7 @@ export default function DetallesAfiliado() {
 
         {/* Acciones */}
         <Grid container justifyContent="space-evenly" mt={4}>
-          <Button
+          {/* <Button
             component={Link}
             to={`/titulares/${idTitular}`}
             startIcon={<PersonIcon />}
@@ -185,7 +187,7 @@ export default function DetallesAfiliado() {
             sx={{ color: "#0097B2" }}
           >
             Ver Titular
-          </Button>
+          </Button> */}
 
           <Button
             startIcon={<WhatsAppIcon />}

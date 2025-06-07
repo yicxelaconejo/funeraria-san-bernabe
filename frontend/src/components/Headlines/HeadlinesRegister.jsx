@@ -25,6 +25,7 @@ function HeadlineFormPage() {
   const { createHeadline, getHeadlineid, updateHeadlineId } = useHeadline();
   const navigate = useNavigate();
   const params = useParams();
+  const fechaAfiliacion = watch("fechaAfiliacion");
 
   // Lista de direcciones válidas para autocompletar dirección (opcional)
   const direccionesValidas = [
@@ -132,7 +133,12 @@ function HeadlineFormPage() {
               fullWidth
               label="Nombre del Usuario"
               placeholder="Nombre Completo"
-              {...register("nombreTitular", { required: "Este campo es requerido" })}
+              {...register("nombreTitular", { required: "Este campo es requerido",
+                pattern: {
+                value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
+                message: "Solo se permiten letras"
+              }
+              })}
               error={!!errors.nombreTitular}
               helperText={errors.nombreTitular?.message}
               variant="outlined"
@@ -146,7 +152,12 @@ function HeadlineFormPage() {
               fullWidth
               label="Apellido del Usuario"
               placeholder="Apellidos"
-              {...register("apellidoTitular", { required: "Este campo es requerido" })}
+              {...register("apellidoTitular", { required: "Este campo es requerido",
+                pattern: {
+                value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
+                message: "Solo se permiten letras"
+              }
+               })}
               error={!!errors.apellidoTitular}
               helperText={errors.apellidoTitular?.message}
               variant="outlined"
@@ -195,7 +206,12 @@ function HeadlineFormPage() {
               fullWidth
               label="Email"
               type="email"
-              {...register("correoTitular", { required: "Este campo es requerido" })}
+              {...register("correoTitular", { required: "Este campo es requerido",
+                pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Debe ser un correo válido"
+              }
+               })}
               error={!!errors.correoTitular}
               helperText={errors.correoTitular?.message}
               variant="outlined"
@@ -245,6 +261,10 @@ function HeadlineFormPage() {
               {...register("telefonoTitular", {
                 required: "Este campo es requerido",
                 valueAsNumber: true,
+                pattern: {
+                value: /^[0-9]+$/,
+                message: "Solo se permiten números"
+              }
               })}
               error={!!errors.telefonoTitular}
               helperText={errors.telefonoTitular?.message}
@@ -285,7 +305,13 @@ function HeadlineFormPage() {
               fullWidth
               type="date"
               label="Fecha de Vencimiento"
-              {...register("fechaVencimiento", { required: "Este campo es requerido" })}
+                {...register("fechaVencimiento", {
+                  required: "Este campo es requerido",
+                  validate: value =>
+                    fechaAfiliacion && value <= fechaAfiliacion
+                      ? "La fecha de vencimiento debe ser mayor a la fecha de afiliación"
+                      : true,
+                })}
               error={!!errors.fechaVencimiento}
               helperText={errors.fechaVencimiento?.message}
               InputLabelProps={{ shrink: true }}

@@ -7,43 +7,131 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAfiliado } from "../../context/AfiliadoContext";
 import { useHeadline } from "../../context/HeadlinesContext";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+
+const serviciosOptions = ["Funerario", "Cremación"];
+
+const schema = yup.object().shape({
+  nombreAfiliado: yup
+    .string()
+    .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo se permiten letras")
+    .required("Este campo es requerido"),
+
+  apellidoAfiliado: yup
+    .string()
+    .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, "Solo se permiten letras")
+    .required("Este campo es requerido"),
+
+  tipoDocAfiliado: yup.string().required("Este campo es requerido"),
+
+  documentoAfiliado: yup
+    .number()
+    .typeError("Debe ser un número")
+    .required("Este campo es requerido"),
+
+  correoAfiliado: yup
+    .string()
+    .email("Correo no válido")
+    .required("Este campo es requerido"),
+
+  telefonoAfiliado: yup
+    .number()
+    .typeError("Debe ser un número")
+    .required("Este campo es requerido"),
+
+  direccionAfiliado: yup.string().required("Este campo es requerido"),
+
+  fechaNacimientoAfiliado: yup.string().required("Este campo es requerido"),
+
+  fechaAfiliacionAfiliado: yup.string().required("Este campo es requerido"),
+
+  fechaVenAfiliado: yup.string().required("Este campo es requerido"),
+
+  serviciosAfiliado: yup
+    .array()
+    .min(1, "Selecciona al menos un servicio")
+    .required("Este campo es requerido"),
+});
 
 export default function AfiliadoRegister() {
-  const { id } = useParams();
+  const { id, afiliadoId } = useParams();
   const navigate = useNavigate();
-  const { createAfiliado } = useAfiliado();
+
+  // Usar las funciones correctas del contexto Afiliado
+  const { createAfiliado, getAfiliadoId, updateAfiliadoId } = useAfiliado();
+
   const { getHeadlineById } = useHeadline();
   const [titularNombre, setTitularNombre] = useState("");
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-  } = useForm();
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
+  // Obtener datos del titular para mostrar en el título
   useEffect(() => {
     async function fetchTitular() {
-      const titular = await getHeadlineById(id);
-      if (titular) {
-        setTitularNombre(`${titular.nombreTitular} ${titular.apellidoTitular}`);
+      console.log("id del titular:", id);
+      if (id) {
+        const titularData = await getHeadlineById(id);
+        if (titularData) {
+          setTitularNombre(titularData.nombreTitular || "");
+        }
       }
+      console.log("titularData:", titularData);
     }
     fetchTitular();
-  }, [id]);
+  }, [id, getHeadlineById]);
 
+  // Obtener datos del afiliado cuando haya afiliadoId para edición
+  useEffect(() => {
+    async function fetchAfiliado() {
+      if (afiliadoId) {
+        const data = await getAfiliadoId(afiliadoId);
+        if (data) {
+          reset({
+            ...data,
+            fechaNacimientoAfiliado: data.fechaNacimientoAfiliado?.slice(0, 10),
+            fechaAfiliacionAfiliado: data.fechaAfiliacionAfiliado?.slice(0, 10),
+            fechaVenAfiliado: data.fechaVenAfiliado?.slice(0, 10),
+          });
+        }
+      }
+    }
+    fetchAfiliado();
+  }, [afiliadoId, reset, getAfiliadoId]);
+
+  // Enviar formulario
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await createAfiliado({ ...data, perteneceTitular: id, estadoAfiliado: true });
-      navigate("/afiliados");
+      if (afiliadoId) {
+        await updateAfiliadoId(afiliadoId, data);
+      } else {
+        await createAfiliado({
+          ...data,
+          perteneceTitular: id,
+          estadoAfiliado: true,
+        });
+      }
+      navigate(`/titulares/${id}/afiliados`);
     } catch (error) {
-      console.error("Error al registrar afiliado:", error);
-      alert("Hubo un error al registrar el afiliado.");
+      console.error("Error al guardar afiliado:", error);
+      if (error.response) {
+        console.error("Respuesta error del servidor:", error.response.data);
+      }
+      alert("Hubo un error al guardar el afiliado.");
     }
   });
 
@@ -78,7 +166,9 @@ export default function AfiliadoRegister() {
         gutterBottom
         sx={{ color: "#333", fontWeight: 700, mb: 4 }}
       >
-        Registrar Afiliado de {titularNombre}
+        {afiliadoId
+          ? `Editar Afiliado`
+          : `Registrar Afiliado`}
       </Typography>
 
       <form onSubmit={onSubmit} noValidate>
@@ -87,7 +177,7 @@ export default function AfiliadoRegister() {
             <TextField
               fullWidth
               label="Nombre del Afiliado"
-              {...register("nombreAfiliado", { required: "Este campo es requerido" })}
+              {...register("nombreAfiliado")}
               error={!!errors.nombreAfiliado}
               helperText={errors.nombreAfiliado?.message}
               variant="outlined"
@@ -100,7 +190,7 @@ export default function AfiliadoRegister() {
             <TextField
               fullWidth
               label="Apellido del Afiliado"
-              {...register("apellidoAfiliado", { required: "Este campo es requerido" })}
+              {...register("apellidoAfiliado")}
               error={!!errors.apellidoAfiliado}
               helperText={errors.apellidoAfiliado?.message}
               variant="outlined"
@@ -114,7 +204,7 @@ export default function AfiliadoRegister() {
               select
               fullWidth
               label="Tipo de Documento"
-              {...register("tipoDocAfiliado", { required: "Este campo es requerido" })}
+              {...register("tipoDocAfiliado")}
               error={!!errors.tipoDocAfiliado}
               helperText={errors.tipoDocAfiliado?.message}
               variant="outlined"
@@ -132,10 +222,7 @@ export default function AfiliadoRegister() {
               fullWidth
               label="Número de Documento"
               type="number"
-              {...register("documentoAfiliado", {
-                required: "Este campo es requerido",
-                valueAsNumber: true,
-              })}
+              {...register("documentoAfiliado", { valueAsNumber: true })}
               error={!!errors.documentoAfiliado}
               helperText={errors.documentoAfiliado?.message}
               variant="outlined"
@@ -149,7 +236,7 @@ export default function AfiliadoRegister() {
               fullWidth
               type="email"
               label="Correo Electrónico"
-              {...register("correoAfiliado", { required: "Este campo es requerido" })}
+              {...register("correoAfiliado")}
               error={!!errors.correoAfiliado}
               helperText={errors.correoAfiliado?.message}
               variant="outlined"
@@ -163,10 +250,7 @@ export default function AfiliadoRegister() {
               fullWidth
               type="tel"
               label="Teléfono"
-              {...register("telefonoAfiliado", {
-                required: "Este campo es requerido",
-                valueAsNumber: true,
-              })}
+              {...register("telefonoAfiliado", { valueAsNumber: true })}
               error={!!errors.telefonoAfiliado}
               helperText={errors.telefonoAfiliado?.message}
               variant="outlined"
@@ -179,7 +263,7 @@ export default function AfiliadoRegister() {
             <TextField
               fullWidth
               label="Dirección"
-              {...register("direccionAfiliado", { required: "Este campo es requerido" })}
+              {...register("direccionAfiliado")}
               error={!!errors.direccionAfiliado}
               helperText={errors.direccionAfiliado?.message}
               variant="outlined"
@@ -193,7 +277,7 @@ export default function AfiliadoRegister() {
               fullWidth
               type="date"
               label="Fecha de Nacimiento"
-              {...register("fechaNacimientoAfiliado", { required: "Este campo es requerido" })}
+              {...register("fechaNacimientoAfiliado")}
               error={!!errors.fechaNacimientoAfiliado}
               helperText={errors.fechaNacimientoAfiliado?.message}
               InputLabelProps={{ shrink: true }}
@@ -206,7 +290,7 @@ export default function AfiliadoRegister() {
               fullWidth
               type="date"
               label="Fecha de Afiliación"
-              {...register("fechaAfiliacionAfiliado", { required: "Este campo es requerido" })}
+              {...register("fechaAfiliacionAfiliado")}
               error={!!errors.fechaAfiliacionAfiliado}
               helperText={errors.fechaAfiliacionAfiliado?.message}
               InputLabelProps={{ shrink: true }}
@@ -219,7 +303,7 @@ export default function AfiliadoRegister() {
               fullWidth
               type="date"
               label="Fecha de Vencimiento"
-              {...register("fechaVenAfiliado", { required: "Este campo es requerido" })}
+              {...register("fechaVenAfiliado")}
               error={!!errors.fechaVenAfiliado}
               helperText={errors.fechaVenAfiliado?.message}
               InputLabelProps={{ shrink: true }}
@@ -227,36 +311,52 @@ export default function AfiliadoRegister() {
             />
           </Grid>
 
+          {/* Campo con selección múltiple */}
           <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              select
-              fullWidth
-              label="Servicios"
-              {...register("serviciosAfiliado", { required: "Este campo es requerido" })}
-              error={!!errors.serviciosAfiliado}
-              helperText={errors.serviciosAfiliado?.message}
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              sx={{ "& fieldset": { borderColor: "#0097B2" } }}
-            >
-              <MenuItem value="Funerario">Funerario</MenuItem>
-              <MenuItem value="Cremación">Cremación</MenuItem>
-            </TextField>
+            <Controller
+              name="serviciosAfiliado"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  select
+                  fullWidth
+                  label="Servicios"
+                  SelectProps={{
+                    multiple: true,
+                    value: field.value || [],
+                    onChange: field.onChange,
+                  }}
+                  error={!!errors.serviciosAfiliado}
+                  helperText={errors.serviciosAfiliado?.message}
+                  variant="outlined"
+                  InputLabelProps={{ shrink: true }}
+                  sx={{ "& fieldset": { borderColor: "#0097B2" } }}
+                >
+                  {serviciosOptions.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ textAlign: "center", mt: 3 }}>
             <Button
-              type="submit"
               variant="contained"
-              fullWidth
+              color="primary"
+              type="submit"
               sx={{
-                backgroundColor: "#0097B2",
-                color: "#fff",
-                fontWeight: 600,
-                height: 48,
+                backgroundColor: "#00A5BD",
+                borderRadius: 4,
+                fontSize: 16,
+                "&:hover": {
+                  backgroundColor: "#00879E",
+                },
               }}
             >
-              Registrar Afiliado
+              {afiliadoId ? "Actualizar Afiliado" : "Registrar Afiliado"}
             </Button>
           </Grid>
         </Grid>
