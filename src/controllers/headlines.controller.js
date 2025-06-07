@@ -237,7 +237,8 @@ export const getAfiliadosByTitular = async (req, res) => {
   try {
     const titularId = req.params.id; // ID del titular recibido por la ruta
 
-    const afiliados = await Afiliado.find({ perteneceTitular: titularId });
+    const afiliados = await Afiliado.find({ perteneceTitular: titularId,estadoAfiliado:true });
+    
 
     if (afiliados.length === 0) {
       return res.status(404).json({ message: "No hay afiliados para este titular." });

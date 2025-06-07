@@ -41,7 +41,7 @@ const afiliadoSchema = new mongoose.Schema(
       required: true,
     },
     serviciosAfiliado: {
-      type: String,
+      type: [String],
     },
     estadoAfiliado: {
       type: Boolean,
