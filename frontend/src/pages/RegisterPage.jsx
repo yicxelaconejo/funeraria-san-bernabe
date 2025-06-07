@@ -3,6 +3,13 @@ import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+  Alert,
+} from "@mui/material";
 
 function RegisterPage() {
   const {
@@ -10,7 +17,8 @@ function RegisterPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signup, isAuthenticated, errors: RegisterErrors} = useAuth();
+
+  const { signup, isAuthenticated, errors: RegisterErrors } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,51 +32,85 @@ function RegisterPage() {
   });
 
   return (
-    <div className="bg-zinc-800 max-w-md p-10 rounded-md">
-      {
-        RegisterErrors.map((error, i) => (
-          <div className="bg-red-500 p-2 text-white" key={i}> {error}</div>
-        ))
-      }
-      <form onSubmit={onSubmit}>
-        <input
-          type="text"
+    <Box
+      sx={{
+        maxWidth: 400,
+        mx: "auto",
+        mt: 8,
+        p: 4,
+        bgcolor: "#ffffff", // Fondo blanco
+        borderRadius: 2,
+        boxShadow: 3,
+      }}
+    >
+      {RegisterErrors.map((error, i) => (
+        <Alert key={i} severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      ))}
+
+      <Typography variant="h5" fontWeight="bold" textAlign="center" mb={3} color="text.primary">
+        Registrar Usuario
+      </Typography>
+
+      <form onSubmit={onSubmit} noValidate>
+        <TextField
+          fullWidth
+          label="Nombre de usuario"
+          variant="filled"
+          InputProps={{ disableUnderline: true }}
+          sx={{ mb: 2, bgcolor: "#f3f4f6" }}
           {...register("username", { required: true })}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          placeholder="Username"
+          error={!!errors.username}
+          helperText={errors.username && "Username es requerido"}
         />
-        {errors.username && (
-          <p className="text-red-500">Username is requerid</p>
-        )}
-        <input
-          type="email"
+
+        <TextField
+          fullWidth
+          label="Correo electrónico"
+          variant="filled"
+          InputProps={{ disableUnderline: true }}
+          sx={{ mb: 2, bgcolor: "#f3f4f6" }}
           {...register("email", { required: true })}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          placeholder="Email"
+          error={!!errors.email}
+          helperText={errors.email && "Email es requerido"}
         />
-        {errors.email && (
-          <p className="text-red-500">email is requerid</p>
-        )}
-        <input
+
+        <TextField
+          fullWidth
+          label="Contraseña"
           type="password"
+          variant="filled"
+          InputProps={{ disableUnderline: true }}
+          sx={{ mb: 2, bgcolor: "#f3f4f6" }}
           {...register("password", { required: true })}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-          placeholder="Password"
+          error={!!errors.password}
+          helperText={errors.password && "Password es requerido"}
         />
-         {errors.password && (
-          <p className="text-red-500">password is requerid</p>
-        )}
-        <button type="submit">Register</button>
+
+        <Button
+          fullWidth
+          type="submit"
+          variant="contained"
+          sx={{
+            mt: 2,
+            bgcolor: "#0097B2",
+            ":hover": { bgcolor: "#007c93" },
+            color: "#fff",
+            fontWeight: "bold"
+          }}
+        >
+          Registrar
+        </Button>
       </form>
 
-      <p className="flex gap-x-2 justify-between">
-  Already have an account?{" "}
-  <Link to="/login" className="text-sky-500">
-    Login
-  </Link>
-</p>
-
-    </div>
+      <Typography mt={3} textAlign="center" color="text.secondary">
+        ¿Ya tienes una cuenta?{" "}
+        <Link to="/login" style={{ color: "#0097B2", fontWeight: "bold" }}>
+          Iniciar sesión
+        </Link>
+      </Typography>
+    </Box>
   );
 }
 

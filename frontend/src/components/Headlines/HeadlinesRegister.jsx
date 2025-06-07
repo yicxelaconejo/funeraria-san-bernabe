@@ -34,9 +34,18 @@ function HeadlineFormPage() {
     { label: "Carrera 6 # 8-15, Popayán", value: "Carrera 6 # 8-15, Popayán" },
     { label: "Calle 12 # 5-33, Popayán", value: "Calle 12 # 5-33, Popayán" },
     { label: "Vereda El Cajete", value: "Vereda El Cajete" },
-    { label: "Vereda El Cajete, sector La Linda", value: "Vereda El Cajete, sector La Linda" },
-    { label: "Vereda El Cajete, finca La Esperanza", value: "Vereda El Cajete, finca La Esperanza" },
-    { label: "Vereda El Cajete, zona rural", value: "Vereda El Cajete, zona rural" },
+    {
+      label: "Vereda El Cajete, sector La Linda",
+      value: "Vereda El Cajete, sector La Linda",
+    },
+    {
+      label: "Vereda El Cajete, finca La Esperanza",
+      value: "Vereda El Cajete, finca La Esperanza",
+    },
+    {
+      label: "Vereda El Cajete, zona rural",
+      value: "Vereda El Cajete, zona rural",
+    },
   ];
 
   useEffect(() => {
@@ -133,11 +142,12 @@ function HeadlineFormPage() {
               fullWidth
               label="Nombre del Usuario"
               placeholder="Nombre Completo"
-              {...register("nombreTitular", { required: "Este campo es requerido",
+              {...register("nombreTitular", {
+                required: "Este campo es requerido",
                 pattern: {
-                value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
-                message: "Solo se permiten letras"
-              }
+                  value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
+                  message: "Solo se permiten letras",
+                },
               })}
               error={!!errors.nombreTitular}
               helperText={errors.nombreTitular?.message}
@@ -152,12 +162,13 @@ function HeadlineFormPage() {
               fullWidth
               label="Apellido del Usuario"
               placeholder="Apellidos"
-              {...register("apellidoTitular", { required: "Este campo es requerido",
+              {...register("apellidoTitular", {
+                required: "Este campo es requerido",
                 pattern: {
-                value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
-                message: "Solo se permiten letras"
-              }
-               })}
+                  value: /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/,
+                  message: "Solo se permiten letras",
+                },
+              })}
               error={!!errors.apellidoTitular}
               helperText={errors.apellidoTitular?.message}
               variant="outlined"
@@ -171,7 +182,9 @@ function HeadlineFormPage() {
               select
               fullWidth
               label="Tipo Documento"
-              {...register("tipoDocTitular", { required: "Este campo es requerido" })}
+              {...register("tipoDocTitular", {
+                required: "Este campo es requerido",
+              })}
               error={!!errors.tipoDocTitular}
               helperText={errors.tipoDocTitular?.message}
               variant="outlined"
@@ -206,12 +219,13 @@ function HeadlineFormPage() {
               fullWidth
               label="Email"
               type="email"
-              {...register("correoTitular", { required: "Este campo es requerido",
+              {...register("correoTitular", {
+                required: "Este campo es requerido",
                 pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Debe ser un correo válido"
-              }
-               })}
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Debe ser un correo válido",
+                },
+              })}
               error={!!errors.correoTitular}
               helperText={errors.correoTitular?.message}
               variant="outlined"
@@ -262,9 +276,9 @@ function HeadlineFormPage() {
                 required: "Este campo es requerido",
                 valueAsNumber: true,
                 pattern: {
-                value: /^[0-9]+$/,
-                message: "Solo se permiten números"
-              }
+                  value: /^[0-9]+$/,
+                  message: "Solo se permiten números",
+                },
               })}
               error={!!errors.telefonoTitular}
               helperText={errors.telefonoTitular?.message}
@@ -279,7 +293,9 @@ function HeadlineFormPage() {
               fullWidth
               type="date"
               label="Fecha de Nacimiento"
-              {...register("fechaNacimientoTitular", { required: "Este campo es requerido" })}
+              {...register("fechaNacimientoTitular", {
+                required: "Este campo es requerido",
+              })}
               error={!!errors.fechaNacimientoTitular}
               helperText={errors.fechaNacimientoTitular?.message}
               InputLabelProps={{ shrink: true }}
@@ -292,7 +308,9 @@ function HeadlineFormPage() {
               fullWidth
               type="date"
               label="Fecha de Afiliación"
-              {...register("fechaAfiliacion", { required: "Este campo es requerido" })}
+              {...register("fechaAfiliacion", {
+                required: "Este campo es requerido",
+              })}
               error={!!errors.fechaAfiliacion}
               helperText={errors.fechaAfiliacion?.message}
               InputLabelProps={{ shrink: true }}
@@ -305,13 +323,13 @@ function HeadlineFormPage() {
               fullWidth
               type="date"
               label="Fecha de Vencimiento"
-                {...register("fechaVencimiento", {
-                  required: "Este campo es requerido",
-                  validate: value =>
-                    fechaAfiliacion && value <= fechaAfiliacion
-                      ? "La fecha de vencimiento debe ser mayor a la fecha de afiliación"
-                      : true,
-                })}
+              {...register("fechaVencimiento", {
+                required: "Este campo es requerido",
+                validate: (value) =>
+                  fechaAfiliacion && value <= fechaAfiliacion
+                    ? "La fecha de vencimiento debe ser mayor a la fecha de afiliación"
+                    : true,
+              })}
               error={!!errors.fechaVencimiento}
               helperText={errors.fechaVencimiento?.message}
               InputLabelProps={{ shrink: true }}
@@ -324,7 +342,9 @@ function HeadlineFormPage() {
               select
               fullWidth
               label="Servicios"
-              {...register("servicios", { required: "Este campo es requerido" })}
+              {...register("servicios", {
+                required: "Este campo es requerido",
+              })}
               error={!!errors.servicios}
               helperText={errors.servicios?.message}
               variant="outlined"
@@ -341,7 +361,9 @@ function HeadlineFormPage() {
               select
               fullWidth
               label="Zona"
-              {...register("zonaTitular", { required: "Este campo es requerido" })}
+              {...register("zonaTitular", {
+                required: "Este campo es requerido",
+              })}
               error={!!errors.zonaTitular}
               helperText={errors.zonaTitular?.message}
               variant="outlined"
@@ -366,7 +388,7 @@ function HeadlineFormPage() {
                 height: 48,
               }}
             >
-              Registrar
+              {params.id ? "Actualizar Titular" : "Registrar Titular"}
             </Button>
           </Grid>
         </Grid>

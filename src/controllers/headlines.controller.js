@@ -7,14 +7,16 @@ import axios from "axios";
 
 
 export const getHeadlines = async (req, res) => {
- try {
-   const headlines = await Headline.find({
-     user: req.user.id
-  }).populate('user');
-  res.json(headlines);
- } catch (error) {
-   return res.status(404).json({ message: "Headline not found" })
- }
+  try {
+    const headlines = await Headline.find({
+      user: req.user.id,
+      estadoTitular: true // ← Agregamos esta línea para filtrar por estado
+    }).populate('user');
+
+    res.json(headlines);
+  } catch (error) {
+    return res.status(404).json({ message: "Headline not found" });
+  }
 };
 
 export const createHeadline = async (req, res) => {

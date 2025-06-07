@@ -3,15 +3,18 @@ import Headline from "../models/headline.model.js";
 
 export const getAfiliados = async (req, res) => {
   try {
-    // 1. Obtener titulares del usuario autenticado
-    const titulares = await Headline.find({ user: req.user.id });
+    // 1. Obtener SOLO titulares activos del usuario autenticado
+    const titulares = await Headline.find({
+      user: req.user.id,
+      estadoAfiliado: true // Solo los titulares con estado true
+    });
 
-    // 2. Extraer los IDs de los titulares
+    // 2. Extraer los IDs de los titulares activos
     const titularIds = titulares.map(titular => titular._id);
 
     // 3. Buscar afiliados que pertenezcan a esos titulares
     const afiliados = await Afiliado.find({ perteneceTitular: { $in: titularIds } })
-      .populate("perteneceTitular"); // opcional: para ver detalles del titular
+      .populate("perteneceTitular"); // Para mostrar detalles del titular (opcional)
 
     res.json(afiliados);
   } catch (error) {
