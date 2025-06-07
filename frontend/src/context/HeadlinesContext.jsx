@@ -31,7 +31,7 @@ export function HeadlineProvider({ children }) {
   };
 
   async function createHeadline(data) {
-    const res = await axios.post("/api/headlines", data);
+    const res = await axios.post("/headlines", data);
     return res.data;
   }
 
