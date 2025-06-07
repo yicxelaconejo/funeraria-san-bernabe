@@ -1,0 +1,65 @@
+/* Navbar.css */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eceffe; /* Azul claro */
+  padding: 0 40px;
+  height: 120px;
+  border-bottom: 1px solid #ccc;
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.navbar__logo img {
+  height: 110px;
+  width: 110px;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid #0bb;
+  background-color: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  padding: 4px;
+}
+
+.navbar__menu {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 14px;
+}
+
+.navbar__menu li a,
+.navbar__menu li .navbar__button,
+.navbar__menu li {
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar__menu li a:hover,
+.navbar__menu li .navbar__button:hover {
+  color: #0077b6;
+}
+
+.navbar__button {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__button::after {
+  content: "👤";
+  margin-left: 5px;
+  font-size: 16px;
+}

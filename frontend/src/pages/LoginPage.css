@@ -1,0 +1,105 @@
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;   /* esto lo empuja hacia arriba */
+  min-height: 100vh;
+  background: #f1f4ff;
+  padding: 3rem 1rem 1rem;   /* más espacio arriba */
+}
+
+.login-form {
+  background: #fff;
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 430px;
+  text-align: center;
+}
+
+.login-logo {
+  width: 140px;
+  margin: 0 auto 1rem auto; /* antes era 2rem */
+  display: block;
+}
+
+.login-title {
+  font-size: 1.9rem;
+  font-weight: bold;
+  color: #029dbb;
+  margin-bottom: 1.5rem; /* antes 2rem */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.login-input-group {
+  display: flex;
+  align-items: center;
+  background: #e6faff;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  width: 100%;
+  border: 1px solid #cceeff;
+}
+
+.login-icon {
+  color: #029dbb;
+  font-size: 1.2rem;
+  margin-right: 0.8rem;
+}
+
+.login-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 1rem;
+  color: #333;
+}
+
+.login-input::placeholder {
+  color: #666;
+}
+
+.login-button {
+  margin-top: 1rem;
+  background: #0099bb;
+  color: white;
+  border: none;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  width: 100%;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-button:hover {
+  background: #007c99;
+}
+
+.login-error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: -0.5rem;
+  text-align: left;
+  width: 100%;
+}
+
+.login-footer {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.login-link {
+  margin-left: 0.3rem;
+  color: #029dbb;
+  font-weight: bold;
+  text-decoration: none;
+}
