@@ -1,8 +1,6 @@
-import axios from "axios";
-
 const instance = axios.create({
-    baseURL: 'http://localhost:4000/api',
-    withCredentials: true
-})
+ baseURL: "/api", // relativo al mismo dominio
+  withCredentials: true,
+});
 
-export default instance
+export default instance;
