@@ -20,6 +20,7 @@ import { AfiliadoProvider } from "./context/AfiliadoContext.jsx";
 function AppRoutes() {
   const location = useLocation();
 
+  // Rutas en las que se oculta la Navbar
   const hideNavbarRoutes = [
     "/headlines",
     "/create-headline",
@@ -35,14 +36,9 @@ function AppRoutes() {
     "/get-afiliado/:id",
   ];
 
-  const hideNavbar = hideNavbarRoutes.some((route) => {
-    try {
-      return matchPath({ path: route }, location.pathname);
-    } catch (error) {
-      console.error("Error en matchPath:", route, error);
-      return false;
-    }
-  });
+  const hideNavbar = hideNavbarRoutes.some((route) =>
+    matchPath(route, location.pathname)
+  );
 
   return (
     <>
