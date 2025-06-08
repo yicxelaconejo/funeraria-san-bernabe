@@ -31,6 +31,11 @@ app.use("/api", authRoutes);
 app.use("/api", headlineRoutes);
 app.use("/api", afiliadoRoutes);
 
+// Ruta de prueba para verificar funcionamiento
+app.get("/", (req, res) => {
+  res.send("API Funeraria San Bernabé funcionando correctamente.");
+});
+
 if (process.env.NODE_ENV === "production") {
 //     app.use(express.static(path.join(__dirname, '../frontend/dist')));
 //     app.get('*', (req, res) => {
