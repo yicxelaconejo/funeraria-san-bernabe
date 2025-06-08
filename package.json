@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+   "build": "npm install --prefix frontend && npm run build --prefix frontend"
   },
   "engines": {
   "node": "18.x"
