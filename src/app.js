@@ -33,16 +33,15 @@ app.use("/api", headlineRoutes);
 app.use("/api", afiliadoRoutes);
 
 // Ruta de prueba
-app.get("/", (req, res) => {
-  res.send("API Funeraria San Bernabé funcionando correctamente.");
-});
+// app.get("/", (req, res) => {
+//   res.send("API Funeraria San Bernabé funcionando correctamente.");
+// });
 
 // En producción, servir el frontend de Vite
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+// Ruta de prueba solo en desarrollo
+if (process.env.NODE_ENV !== "production") {
+  app.get("/", (req, res) => {
+    res.send("API Funeraria San Bernabé funcionando correctamente.");
   });
 }
 
