@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import DetallesAfiliado from "../components/afiliados/DetallesAfiliado";
-import HeaderAfiliado from "../components/headerAfiliado";
+import HeaderAfiliado from "../components/HeaderAfiliado";
 
 export default function DetalleAfiliadoPage() {
   return (
