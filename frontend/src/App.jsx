@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, matchPath } from "react-router-dom";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
@@ -14,14 +14,13 @@ import RouteMap from "./components/RouteMap.jsx";
 import RutaMapaTitular from "./components/Headlines/RutaMapaTitular.jsx";
 import AfiliadoFormPage from "./pages/AfiliadoFormPage.jsx";
 import AfiliadosTablePage from "./pages/AfiliadosTablePage.jsx";
-import DetallesAfiliado from "./components/afiliados/DetallesAfiliado.jsx";
 import DetalleAfiliadoPage from "./pages/DetalleAfiliadoPage.jsx";
 import { AfiliadoProvider } from "./context/AfiliadoContext.jsx";
 
 function AppRoutes() {
   const location = useLocation();
 
-  // Ocultar navbar en ciertas rutas
+  // Rutas en las que se oculta la Navbar
   const hideNavbarRoutes = [
     "/headlines",
     "/create-headline",
@@ -32,10 +31,13 @@ function AppRoutes() {
     "/ruta-cobro/:id",
     "/register-afiliado",
     "/titulares/:id/afiliados",
+    "/titulares/:id/afiliados/register",
+    "/titulares/:id/afiliados/:afiliadoId/update",
     "/get-afiliado/:id",
   ];
-  const hideNavbar = hideNavbarRoutes.some(
-    (path) => location.pathname.startsWith(path.split("/:")[0]) // Soporte para rutas dinámicas
+
+  const hideNavbar = hideNavbarRoutes.some((route) =>
+    matchPath(route, location.pathname)
   );
 
   return (
@@ -45,6 +47,7 @@ function AppRoutes() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+
         <Route element={<ProtectedRoute />}>
           <Route path="/headlines" element={<HeadlinePage />} />
           <Route path="/create-headline" element={<HeadlineFormPage />} />
@@ -54,12 +57,10 @@ function AppRoutes() {
           <Route path="/ruta-cobro" element={<RouteMap />} />
           <Route path="/ruta-cobro/:id" element={<RutaMapaTitular />} />
 
-          <Route path="/titulares/:id/afiliados/register" element={<AfiliadoFormPage />} /> 
-          <Route path="/titulares/:id/afiliados/:afiliadoId/update" element={<AfiliadoFormPage />} />
           <Route path="/titulares/:id/afiliados" element={<AfiliadosTablePage />} />
+          <Route path="/titulares/:id/afiliados/register" element={<AfiliadoFormPage />} />
+          <Route path="/titulares/:id/afiliados/:afiliadoId/update" element={<AfiliadoFormPage />} />
           <Route path="/get-afiliado/:id" element={<DetalleAfiliadoPage />} />
-        
-
         </Route>
       </Routes>
     </>
@@ -71,9 +72,9 @@ function App() {
     <AuthProvider>
       <HeadlineProvider>
         <AfiliadoProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
         </AfiliadoProvider>
       </HeadlineProvider>
     </AuthProvider>
