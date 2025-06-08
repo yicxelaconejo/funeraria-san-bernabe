@@ -14,7 +14,7 @@ export const updateAffiliate = (id, affiliate) =>
   axios.put(`/afiliados/${id}`, affiliate);
 
 // Cambiar el estado (activar/desactivar) de un afiliado
-export const deleteAffiliate = (id) => axios.delete(`/afiliados/${id}`);
+export const deleteAffiliate = (id) => axios.put(`/afiliados/${id}/toggle-estado`);
 
 
 export const getAfiliadosByTitular = (id) => 
